@@ -31,7 +31,7 @@ Exit the Tool: Type Exit to gracefully close the script. A farewell message will
 Customization
 Change CMD Color: Typing "Anthony is my god" will change the CMD color to red as a fun customization option.
 Support
-For any issues or inquiries, please contact support at support@example.com. We are here to assist you with any questions or concerns.
+For any issues or inquiries, please contact support at Anthonybesigheid@gmail.com. We are here to assist you with any questions or concerns.
 
 Acknowledgements
 Anthony's CMD Advanced is a product of thoughtful design and dedication to enhancing your command-line experience. Thank you for using our tool!
