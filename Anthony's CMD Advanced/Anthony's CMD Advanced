@@ -11,6 +11,7 @@ echo Type a command or ask Anthony to adjust settings:
 echo (e.g., "Display Settings," "Wi-Fi Settings," "Privacy Settings")
 echo.
 echo Type Exit to exit
+echo Type "Anthony is my god" for an egg
 echo.
 set /p userInput="> "
 
@@ -32,6 +33,45 @@ if /I "!userInput!"=="anthony is my god" (
     echo.
     pause >nul
     goto :main
+
+)
+
+:: Check for "Anthony is not my god" command
+if /I "!userInput!"=="anthony is not my god" (
+    color 1F
+    echo.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!. 
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!. 
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!. 
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!. 
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!. 
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!. 
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!.
+    echo Anthony loves all, but not you!. 
+    echo.
+    pause >nul
+    goto :main
+
 )
 
 :: Match specific "Settings" keywords in user input
