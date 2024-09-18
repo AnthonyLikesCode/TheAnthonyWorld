@@ -10,8 +10,7 @@ echo.
 echo Type a command or ask Anthony to adjust settings:
 echo (e.g., "Display Settings," "Wi-Fi Settings," "Privacy Settings")
 echo.
-echo Type Exit to exit
-echo Type "Anthony is my god" for an egg
+echo Type Menu for some instructions
 echo.
 set /p userInput="> "
 
@@ -73,6 +72,18 @@ if /I "!userInput!"=="anthony is not my god" (
     goto :main
 
 )
+
+:: Check for "Menu" command
+if /I "!userInput!"=="Menu" (
+    echo Type Exit to exit
+    echo Type "Anthony is my god" for an egg
+    echo type "Type "list" for a list of commands"
+    pause >nul
+    goto :main
+
+)
+
+
 
 :: Match specific "Settings" keywords in user input
 if /I "!userInput!"=="display settings" goto :openDisplaySettings
@@ -198,5 +209,12 @@ cls
 echo ===========================================================
 echo          Goodbye and thank you for visiting! ~Anthony
 echo ===========================================================
+echo Software engineer - Anthony
+echo Concept planner - Anthony
+echo Team Manager - Anthony
+echo Coding team - Anthony
+echo Egg planter - Anthony
+echo Financial support - Anthony
+echo This credit sequence - Anthony
 ping 127.0.0.1 -n 6 >nul
 exit
