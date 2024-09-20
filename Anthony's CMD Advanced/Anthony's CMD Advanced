@@ -1,220 +1,218 @@
 @echo off
-title Anthony's CMD Advanced
+title Anthony presents...
+color 0A
 
-:main
+:loadingBar
 cls
-echo ==================================================
-echo          Welcome to Anthony's CMD Advanced
-echo ==================================================
 echo.
-echo Type a command or ask Anthony to adjust settings:
-echo (e.g., "Display Settings," "Wi-Fi Settings," "Privacy Settings")
-echo.
-echo Type Menu for some instructions
-echo.
-set /p userInput="> "
+echo =============================================================
+echo                     Anthony presents...
+echo =============================================================
 
-:: Normalize input to lowercase
-setlocal enabledelayedexpansion
-set "userInput=!userInput!"
-for %%A in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
-    set "userInput=!userInput:%%A=%%A!"
+REM Pause for effect
+timeout /t 2 >nul
+
+REM Fade effect - Bar 1
+color 0E
+echo [######################                    ]
+timeout /t 1 >nul
+cls
+echo.
+echo =============================================================
+echo                     Anthony presents...
+echo =============================================================
+echo [###############################           ]
+timeout /t 1 >nul
+cls
+echo.
+echo =============================================================
+echo                     Anthony presents...
+echo =============================================================
+echo [#######################################   ]
+timeout /t 1 >nul
+cls
+echo.
+echo =============================================================
+echo                     Anthony presents...
+echo =============================================================
+echo [##########################################]
+timeout /t 1 >nul
+
+REM Display final title
+cls
+title Anthony's CMD Advanced - Version 1.2
+color 0A
+echo =============================================================
+echo                  Anthony's CMD Advanced 
+echo                      Version 1.2
+echo =============================================================
+timeout /t 2 >nul
+
+REM Simulate "login" with prompt
+set /p user="Enter your username: "
+
+if "%user%"=="" (
+    echo Username cannot be empty!
+    timeout /t 2 >nul
+    goto loadingBar
 )
 
-:: Check for "Exit" command
-if /I "!userInput!"=="exit" goto :exit
+echo Welcome, %user%!
+timeout /t 2 >nul
+cls
 
-:: Check for "Anthony is my god" command
-if /I "!userInput!"=="anthony is my god" (
-    color 4F
-    echo.
-    echo Anthony loves all, but all needs love be.
-    echo.
-    pause >nul
-    goto :main
+:start
+cls
+echo =============================================================
+echo              Type "List" for available commands.
+echo =============================================================
+set /p command="> "
 
-)
+if /i "%command%"=="List" goto appBar
+if /i "%command%"=="Anthony is my god" goto whisper
+if /i "%command%"=="Anthony is not my god" goto blasphemy
+if /i "%command%"=="exit" goto exitDialogue
 
-:: Check for "Anthony is not my god" command
-if /I "!userInput!"=="anthony is not my god" (
-    color 1F
-    echo.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!. 
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!. 
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!. 
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!. 
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!. 
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!. 
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!.
-    echo Anthony loves all, but not you!. 
-    echo.
-    pause >nul
-    goto :main
-
-)
-
-:: Check for "Menu" command
-if /I "!userInput!"=="Menu" (
-    echo Type Exit to exit
-    echo Type "Anthony is my god" for an egg
-    echo type "Type "list" for a list of commands"
-    pause >nul
-    goto :main
-
-)
-
-
-
-:: Match specific "Settings" keywords in user input
-if /I "!userInput!"=="display settings" goto :openDisplaySettings
-if /I "!userInput!"=="wifi settings" goto :openWiFiSettings
-if /I "!userInput!"=="bluetooth settings" goto :openBluetoothSettings
-if /I "!userInput!"=="network settings" goto :openNetworkSettings
-if /I "!userInput!"=="ip settings" goto :openIPSettings
-if /I "!userInput!"=="privacy settings" goto :openPrivacySettings
-if /I "!userInput!"=="sound settings" goto :openSoundSettings
-if /I "!userInput!"=="battery settings" goto :openBatterySettings
-if /I "!userInput!"=="storage settings" goto :openStorageSettings
-if /I "!userInput!"=="region settings" goto :openRegionSettings
-if /I "!userInput!"=="update settings" goto :openUpdateSettings
-if /I "!userInput!"=="apps settings" goto :openAppsSettings
-if /I "!userInput!"=="list" goto :showList
-
-:: If no match is found
-echo.
-echo Anthony didn't understand your command. Please try again.
-echo.
+echo Invalid input, please try again.
 pause >nul
-goto :main
+goto start
 
-:: Define actions for each setting
-:openDisplaySettings
-echo.
-echo Opening Display Settings...
-start ms-settings:display
-goto :main
-
-:openWiFiSettings
-echo.
-echo Opening Wi-Fi Settings...
-start ms-settings:network-wifi
-goto :main
-
-:openBluetoothSettings
-echo.
-echo Opening Bluetooth & Devices Settings...
-start ms-settings:bluetooth
-goto :main
-
-:openNetworkSettings
-echo.
-echo Opening Network & Internet Settings...
-start ms-settings:network
-goto :main
-
-:openIPSettings
-echo.
-echo Opening IP Settings...
-start ms-settings:network-status
-goto :main
-
-:openPrivacySettings
-echo.
-echo Opening Privacy Settings...
-start ms-settings:privacy
-goto :main
-
-:openSoundSettings
-echo.
-echo Opening Sound Settings...
-start ms-settings:sound
-goto :main
-
-:openBatterySettings
-echo.
-echo Opening Battery & Power Settings...
-start ms-settings:batterysaver
-goto :main
-
-:openStorageSettings
-echo.
-echo Opening Storage Settings...
-start ms-settings:storagesense
-goto :main
-
-:openRegionSettings
-echo.
-echo Opening Region & Language Settings...
-start ms-settings:regionformatting
-goto :main
-
-:openUpdateSettings
-echo.
-echo Opening Windows Update Settings...
-start ms-settings:windowsupdate
-goto :main
-
-:openAppsSettings
-echo.
-echo Opening Apps & Features Settings...
-start ms-settings:appsfeatures
-goto :main
-
-:showList
+:whisper
 cls
-echo ==================================================
-echo                  Available Commands                
-echo ==================================================
-echo 1. Display Settings
-echo 2. Wi-Fi Settings
-echo 3. Bluetooth Settings
-echo 4. Network Settings
-echo 5. IP Settings (opens network status page)
-echo 6. Privacy Settings
-echo 7. Sound Settings
-echo 8. Battery Settings
-echo 9. Storage Settings
-echo 10. Region Settings
-echo 11. Windows Update Settings
-echo 12. Apps Settings
-echo 13. List (show this list)
-echo ==================================================
 echo.
-echo Press any key to return to the main menu...
+echo              * Anthony whispers... *
+echo              "In shadows deep and night so bold,"
+echo              "One heart beats for none, yet for all, behold."
+echo              "To love is to give, to cherish, to hold,"
+echo              "For in the dance of fate, the truth is told."
+echo.
+echo.
+timeout /t 5 >nul
+
+REM Go back to the main menu and add puns
+goto punMenu
+
+:punMenu
+:start
+cls
+echo =============================================================
+echo              For The god Anthony Above,
+echo           type "LIST" for forgiveness of the highest order!
+echo =============================================================
+set /p command="> "
+
+if /i "%command%"=="List" goto appBar
+if /i "%command%"=="exit" goto exitDialogue
+
+echo Invalid input, please try again.
 pause >nul
-goto :main
+goto start
 
-:exit
+:appBar
 cls
-echo ===========================================================
-echo          Goodbye and thank you for visiting! ~Anthony
-echo ===========================================================
-echo Software engineer - Anthony
-echo Concept planner - Anthony
-echo Team Manager - Anthony
-echo Coding team - Anthony
-echo Egg planter - Anthony
-echo Financial support - Anthony
-echo This credit sequence - Anthony
-ping 127.0.0.1 -n 6 >nul
+echo =============================================================
+echo                   Anthony's CMD Advanced - Version 1.2
+echo =============================================================
+echo  [1]  Display Settings       [2]  Wi-Fi Settings
+echo  [3]  Privacy Settings       [4]  Network Settings
+echo  [5]  Bluetooth Settings     [6]  Sound Settings
+echo  [7]  Time Settings          [8]  System Info
+echo  [9]  Windows Update         [10] Apps
+echo  [11] Keyboard Settings      [12] Mouse Settings
+echo  [13] Power Settings         [14] Storage Settings
+echo  [15] Credits
+echo -------------------------------------------------------------
+echo  Type a command number or "back" to return to the main menu:
+set /p input="> "
+
+REM Handle exit command
+if /i "%input%"=="exit" goto exitDialogue
+
+REM Handle back command
+if /i "%input%"=="back" goto start
+
+REM Display credits if requested
+if /i "%input%"=="15" (
+    cls
+    echo =============================================================
+    echo                          Credits
+    echo =============================================================
+    echo Software Engineer: Anthony
+    echo Production Manager: Anthony
+    echo =============================================================
+    pause
+    goto appBar
+)
+
+REM Display messages instead of running commands with puns
+if "%input%"=="1" echo "Anthony’s Display is Always Bright!"
+if "%input%"=="2" echo "Wi-Fi like Anthony's Love, Strong and Unbreakable!"
+if "%input%"=="3" echo "Privacy Settings, because Anthony Cares!"
+if "%input%"=="4" echo "Network Settings, Connecting Like Anthony Does!"
+if "%input%"=="5" echo "Bluetooth, the Invisible Connection of Anthony!"
+if "%input%"=="6" echo "Sound Settings, Hear Anthony’s Call!"
+if "%input%"=="7" echo "Time Settings, Because Every Moment is Anthony's!"
+if "%input%"=="8" echo "System Info, Know Thyself, Like Anthony!"
+if "%input%"=="9" echo "Windows Update, Keeping Up with Anthony!"
+if "%input%"=="10" echo "Apps, Anthony's Tools for Life!"
+if "%input%"=="11" echo "Keyboard Settings, Type Like Anthony!"
+if "%input%"=="12" echo "Mouse Settings, Click with Anthony’s Precision!"
+if "%input%"=="13" echo "Power Settings, Unleash Anthony’s Energy!"
+if "%input%"=="14" echo "Storage Settings, Keep it Together Like Anthony!"
+
+echo Invalid input, please try again.
+pause >nul
+goto appBar
+
+:blasphemy
+cls
+echo Anthony, the most gracious of gods, shall not unleash his wrath upon thee for thy blasphemy this time.
+echo "Yet beware, for the shadows grow thick, and the gods of death draw near."
+echo.
+echo Preserving your fate in the annals of time...
+echo.
+
+REM Create a text file with the message
+echo Anthony, the most gracious of gods, shall not unleash his wrath upon thee for thy blasphemy this time. > blasphemy.txt
+echo Yet beware, for the shadows grow thick, and the gods of death draw near. >> blasphemy.txt
+start notepad blasphemy.txt
+
+timeout /t 2 >nul
+exit
+
+:exitDialogue
+cls
+echo =============================================================
+echo                   Exiting...
+echo =============================================================
+for /L %%i in (7,-1,0) do (
+    setlocal enabledelayedexpansion
+    set /a "percent=%%i * 14"
+    cls
+    echo [Loading... !percent!%%]
+    timeout /t 1 >nul
+    endlocal
+)
+
+cls
+echo * Anthony's voice echoes with disdain... *
+echo "You dare abandon the cause of the god Anthony? Your choices lead to your downfall!"
+echo "Join the cult or sacrifice your soul. Choose wisely!"
+echo.
+echo 1. Join cult
+echo 2. Sacrifice your soul
+
+set /p choice="Choose an option (1 or 2): "
+
+if "%choice%"=="1" (
+    start "" "https://github.com/AnthonyLikesCode/TheAnthonyWorld"
+    exit
+)
+
+if "%choice%"=="2" (
+    echo "Your fate is sealed. Farewell..."
+    exit
+)
+
+echo Invalid choice. Exiting...
 exit
