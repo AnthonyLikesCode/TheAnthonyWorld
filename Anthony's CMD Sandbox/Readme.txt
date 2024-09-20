@@ -25,8 +25,5 @@ Submit a pull request.
 License
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
-Contact
-For questions or feedback, please reach out to:
-
-Anthony Morton - [your-email@example.com]
+Anthony
 Feel free to customize any sections to better suit your project or add any additional information you'd like to include!
