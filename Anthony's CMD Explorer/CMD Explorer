@@ -1,0 +1,347 @@
+@echo off
+setlocal enabledelayedexpansion
+
+:: Load existing users
+if not exist users.txt echo Anthony,password123 > users.txt
+
+:login_menu
+cls
+echo ============================================================================ 
+echo                      WELCOME TO ANTHONY'S CMD EXPLORER             BETA v1.0        
+echo ============================================================================ 
+echo.
+echo [1] Login
+echo [2] Create New User
+echo [3] Exit
+echo.
+set /p login_choice=Choose an option (1-3): 
+
+:: Anthony Easter Eggs
+call :easter_egg_check "%login_choice%"
+
+if "%login_choice%"=="" (
+    echo No option selected!
+    pause
+    goto login_menu
+)
+if "%login_choice%"=="1" goto login
+if "%login_choice%"=="2" goto create_user
+if "%login_choice%"=="3" exit
+
+cls
+echo Invalid choice! Please choose a valid option.
+pause
+goto login_menu
+
+:create_user
+cls
+echo ============================================================================ 
+echo                        CREATE NEW USER                             BETA v1.0        
+echo ============================================================================ 
+set /p new_username=Enter new username: 
+set /p new_password=Enter new password: 
+
+call :easter_egg_check "%new_username%"
+call :easter_egg_check "%new_password%"
+
+if "%new_username%"=="" (
+    echo No username entered!
+    pause
+    goto create_user
+)
+
+if "%new_password%"=="" (
+    echo No password entered!
+    pause
+    goto create_user
+)
+
+:: Check if user already exists
+findstr /i /c:"%new_username%" users.txt >nul
+if not errorlevel 1 (
+    echo Username already exists! Please try again.
+    pause
+    goto create_user
+)
+
+:: Save new user credentials
+echo %new_username%,%new_password% >> users.txt
+echo User created successfully!
+pause
+goto login_menu
+
+:login
+cls
+echo ============================================================================ 
+echo                            LOGIN                                   BETA v1.0        
+echo ============================================================================ 
+set /p username=Enter username: 
+set /p password=Enter password: 
+
+call :easter_egg_check "%username%"
+call :easter_egg_check "%password%"
+
+if "%username%"=="" (
+    echo No username entered!
+    pause
+    goto login
+)
+
+if "%password%"=="" (
+    echo No password entered!
+    pause
+    goto login
+)
+
+:: Check credentials
+findstr /i /c:"%username%,%password%" users.txt >nul
+if not errorlevel 1 (
+    echo Login successful!
+    set current_user=%username%
+    set current_pass=%password%
+    pause
+    goto main
+) else (
+    echo Invalid login. Please try again.
+    pause
+    goto login_menu
+)
+
+:main
+cls
+echo ============================================================================ 
+echo                WELCOME, %current_user% TO ANTHONY'S CMD EXPLORER   BETA v1.0          
+echo ============================================================================ 
+echo.
+echo Current Directory: %cd%
+echo.
+echo [1] List and Interact with Files
+echo [2] Change Directory
+echo [3] Change Username/Password
+echo [4] Logout
+echo [5] Exit
+echo.
+set /p choice=Choose an option (1-5): 
+
+call :easter_egg_check "%choice%"
+
+if "%choice%"=="" (
+    echo No option selected!
+    pause
+    goto main
+)
+if "%choice%"=="1" goto list_files
+if "%choice%"=="2" goto change_dir_menu
+if "%choice%"=="3" goto change_creds
+if "%choice%"=="4" goto login_menu
+if "%choice%"=="5" exit
+
+cls
+echo Invalid choice! Please choose a valid option.
+pause
+goto main
+
+:change_creds
+cls
+echo ============================================================================ 
+echo                         CHANGE USERNAME/PASSWORD                   BETA v1.0       
+echo ============================================================================ 
+set /p new_username=Enter new username: 
+set /p new_password=Enter new password: 
+
+call :easter_egg_check "%new_username%"
+call :easter_egg_check "%new_password%"
+
+if "%new_username%"=="" (
+    echo No username entered!
+    pause
+    goto change_creds
+)
+
+if "%new_password%"=="" (
+    echo No password entered!
+    pause
+    goto change_creds
+)
+
+:: Update credentials in users.txt
+setlocal enabledelayedexpansion
+for /f "tokens=*" %%a in (users.txt) do (
+    set line=%%a
+    echo !line! | findstr /i /c:"%current_user%,%current_pass%" >nul
+    if not errorlevel 1 (
+        set line=%new_username%,%new_password%
+    )
+    echo !line! >> temp_users.txt
+)
+del users.txt
+rename temp_users.txt users.txt
+
+echo Username and password changed successfully!
+pause
+goto login_menu
+
+:list_files
+cls
+echo ============================================================================ 
+echo                      FILES IN DIRECTORY                            BETA v1.0  
+echo ============================================================================ 
+set count=1
+for %%F in (*) do (
+    echo [!count!] %%F
+    set /a count+=1
+)
+set /p filechoice=Choose a file by number (or press X to return): 
+
+call :easter_egg_check "%filechoice%"
+
+if "%filechoice%"=="" (
+    echo No option selected!
+    pause
+    goto list_files
+)
+
+if "%filechoice%"=="X" goto main
+if "%filechoice%"=="x" goto main
+
+set count=1
+for %%F in (*) do (
+    if "!count!"=="%filechoice%" set selectedfile=%%F
+    set /a count+=1
+)
+
+if not defined selectedfile (
+    echo Invalid selection.
+    pause
+    goto list_files
+)
+
+:interact_file
+cls
+echo ============================================================================ 
+echo                      FILE INTERACTION MENU                        BETA v1.0    
+echo ============================================================================ 
+echo Selected File: %selectedfile%
+echo.
+echo [1] Open File
+echo [2] Delete File
+echo [3] Copy File
+echo [4] Move File
+echo [5] Return to Main Menu
+echo.
+set /p interactchoice=Choose an option (1-5): 
+
+call :easter_egg_check "%interactchoice%"
+
+if "%interactchoice%"=="" (
+    echo No option selected!
+    pause
+    goto interact_file
+)
+
+if "%interactchoice%"=="1" goto open_file
+if "%interactchoice%"=="2" goto delete_file
+if "%interactchoice%"=="3" goto copy_file
+if "%interactchoice%"=="4" goto move_file
+if "%interactchoice%"=="5" goto main
+
+cls
+echo Invalid choice! Please choose a valid option.
+pause
+goto interact_file
+
+:change_dir_menu
+cls
+echo ============================================================================ 
+echo                           CHANGE DIRECTORY MENU                    BETA v1.0       
+echo ============================================================================ 
+echo.
+echo Current Directory: %cd%
+echo.
+set count=1
+for /d %%D in (*) do (
+    echo [!count!] %%D
+    set /a count+=1
+)
+echo [0] Go to Parent Directory
+echo.
+set /p dir_choice=Choose a directory to navigate (or press X to return): 
+
+call :easter_egg_check "%dir_choice%"
+
+if "%dir_choice%"=="" (
+    echo No option selected!
+    pause
+    goto change_dir_menu
+)
+
+if "%dir_choice%"=="X" goto main
+if "%dir_choice%"=="x" goto main
+
+if "%dir_choice%"=="0" (
+    cd ..
+    if "%cd%"=="%SystemDrive%\" (
+        echo You are at the root directory and cannot move further up.
+        pause
+    )
+    goto main
+)
+
+set count=1
+for /d %%D in (*) do (
+    if "!count!"=="%dir_choice%" set selecteddir=%%D
+    set /a count+=1
+)
+
+if not defined selecteddir (
+    echo Invalid selection.
+    pause
+    goto change_dir_menu
+)
+
+cd "%selecteddir%"
+goto main
+
+:open_file
+cls
+start "" "%selectedfile%" 2>nul
+if errorlevel 1 (
+    echo File not found or unable to open.
+    pause
+)
+goto interact_file
+
+:delete_file
+cls
+del "%selectedfile%" 2>nul
+if errorlevel 1 (
+    echo File not found or unable to delete.
+    pause
+) else (
+    echo File deleted successfully!
+    pause
+)
+goto main
+
+:copy_file
+cls
+set /p destdir=Enter the destination directory: 
+if not exist "%destdir%" (
+    echo Destination directory not found!
+    pause
+    goto interact_file
+)
+copy "%selectedfile%" "%destdir%" 2>nul
+if errorlevel 1 (
+    echo Unable to copy the file.
+    pause
+) else (
+    echo File copied successfully!
+    pause
+)
+goto interact_file
+
+:move_file
+cls
+set /p destdir=Enter the destination directory: 
+if
