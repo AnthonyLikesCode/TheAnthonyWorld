@@ -1,0 +1,18 @@
+Anthony's CMD Explorer - BETA v1.0
+Anthony's CMD Explorer is a command-line application that acts as a file explorer and manager, offering users an interactive experience within the terminal. Built to streamline file and directory operations, it provides a variety of essential tools for navigating and managing files without leaving the CMD environment.
+
+Key Features:
+User Authentication System: Secure login and user management with the ability to create new accounts, update usernames, and change passwords.
+File Operations: Easily open, copy, move, or delete files through a guided menu.
+Directory Navigation: Jump between directories and access subdirectories or return to parent directories without manual input.
+Interactive File Explorer: Browse files in the current directory, select them, and perform actions with a simple menu-driven interface.
+Custom Reactions: Unique interactions in response to specific phrases related to Anthony, adding a fun and personalized touch to the tool.
+Error Feedback: Provides clear prompts and error handling to ensure smooth and intuitive usage.
+How It Works:
+Log in using your credentials or create a new user account.
+Navigate directories using the interactive menu system.
+Perform file operations like viewing, copying, moving, or deleting files.
+Update your account details (username and password) directly from the application.
+Explore fun and quirky responses for specific phrases.
+Anthony's CMD Explorer is a customizable and efficient way to manage files directly from the command line, enhancing the traditional CMD interface with a richer and more user-friendly experience.
+
