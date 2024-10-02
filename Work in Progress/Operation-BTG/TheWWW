@@ -1,0 +1,196 @@
+import sys
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtGui import QIcon, QPalette, QColor, QCursor, QKeySequence
+
+class Browser(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        # Set full screen on launch
+        self.setWindowState(Qt.WindowMaximized)
+
+        # Create a central widget to hold the title bar and tabs
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
+
+        # Create a vertical layout for the central widget
+        self.layout = QVBoxLayout(self.central_widget)
+
+        # Create a custom title bar
+        self.title_bar = QWidget()
+        self.title_bar_layout = QHBoxLayout()
+        self.title_bar.setLayout(self.title_bar_layout)
+        self.title_bar.setStyleSheet("background-color: #333;")  # Dark background
+
+        # Title branding
+        self.title_label = QLabel("TheAnthonyWorld Browser")
+        self.title_label.setStyleSheet("color: #fff; font-size: 16px; padding: 5px;")
+        self.title_bar_layout.addWidget(self.title_label)
+
+        # Navigation buttons
+        self.back_button = QPushButton("←")
+        self.forward_button = QPushButton("→")
+        self.reload_button = QPushButton("⟳")
+
+        # Button styling and hover effects
+        for button in [self.back_button, self.forward_button, self.reload_button]:
+            button.setStyleSheet("background-color: #444; color: #fff; border: none; padding: 5px;")
+            button.setFixedSize(30, 30)
+            button.setCursor(QCursor(Qt.PointingHandCursor))
+            button.setStyleSheet("QPushButton {background-color: #444; color: #fff; border: none; padding: 5px;} "
+                                 "QPushButton:hover {background-color: #555;}")  # Hover effect
+
+        self.title_bar_layout.addWidget(self.back_button)
+        self.title_bar_layout.addWidget(self.forward_button)
+        self.title_bar_layout.addWidget(self.reload_button)
+
+        # Add URL bar
+        self.url_bar = QLineEdit()
+        self.url_bar.setPlaceholderText("Enter URL here...")
+        self.url_bar.setStyleSheet("padding: 5px; font-size: 14px; background-color: #555; color: white; border: none;")
+        self.url_bar.returnPressed.connect(self.navigate_to_url)  # Navigate on pressing Enter
+        self.title_bar_layout.addWidget(self.url_bar)
+
+        # Add favorite button
+        self.favorite_button = QPushButton("★")
+        self.favorite_button.setStyleSheet("background-color: #444; color: #fff; border: none; padding: 5px;")
+        self.favorite_button.clicked.connect(self.add_favorite)
+        self.title_bar_layout.addWidget(self.favorite_button)
+
+        # Add tabs
+        self.browser = QTabWidget()
+        self.layout.addWidget(self.title_bar)  # Add title bar to the layout
+        self.layout.addWidget(self.browser)  # Add browser tab widget to the layout
+
+        # Create a favorite list dropdown
+        self.favorite_list = QComboBox()
+        self.favorite_list.setStyleSheet("background-color: #333; color: white;")
+        self.title_bar_layout.addWidget(self.favorite_list)
+
+        # Maintain a list of favorites
+        self.favorites = []
+
+        # Create history tab
+        self.history = []
+
+        # Open default tab
+        self.add_tab(QUrl("https://www.google.com"), "Google")  # Default tab
+
+        # Add the new tab button as a tab at the end
+        self.add_new_tab_button()
+
+        # Connect buttons to their actions
+        self.back_button.clicked.connect(self.go_back)
+        self.forward_button.clicked.connect(self.go_forward)
+        self.reload_button.clicked.connect(self.reload_page)
+
+        # Update the URL bar when switching tabs
+        self.browser.currentChanged.connect(self.update_url_bar)
+
+        # Enable tab closing with CTRL+W
+        self.shortcut_close_tab = QShortcut(QKeySequence("Ctrl+W"), self)
+        self.shortcut_close_tab.activated.connect(self.close_current_tab)
+
+    def add_tab(self, url, label):
+        # Create a new browser tab
+        new_tab = QWebEngineView()
+        new_tab.setUrl(url)
+        self.browser.insertTab(self.browser.count() - 1, new_tab, label)  # Add before the + button
+        self.browser.setCurrentWidget(new_tab)
+        self.update_url_bar()  # Update URL bar when new tab is added
+
+        # Add to history
+        self.history.append((label, url.toString(), QDateTime.currentDateTime().toString()))
+
+    def add_new_tab_button(self):
+        # Create a tab with the "+" icon
+        self.new_tab_index = self.browser.addTab(QWidget(), "+")
+        self.browser.setTabEnabled(self.new_tab_index, False)  # Disable this tab
+        self.browser.tabBar().setTabButton(self.new_tab_index, QTabBar.RightSide, self.create_new_tab_button())
+
+    def create_new_tab_button(self):
+        new_tab_button = QPushButton("+")
+        new_tab_button.setFixedSize(30, 30)
+        new_tab_button.setStyleSheet("background-color: #444; color: #fff; border: none;")
+        new_tab_button.setCursor(QCursor(Qt.PointingHandCursor))
+        new_tab_button.clicked.connect(self.add_new_tab)
+        return new_tab_button
+
+    def add_new_tab(self):
+        # Open a new tab with a default URL
+        self.add_tab(QUrl("https://www.google.com"), "New Tab")
+
+    def navigate_to_url(self):
+        # Navigate to the URL in the URL bar
+        url = self.url_bar.text()
+        if not url.startswith("http://") and not url.startswith("https://"):
+            url = "https://" + url
+        self.browser.currentWidget().setUrl(QUrl(url))
+
+    def update_url_bar(self):
+        # Update URL bar with the current tab's URL
+        current_tab = self.browser.currentWidget()
+        if current_tab:
+            self.url_bar.setText(current_tab.url().toString())
+
+    def go_back(self):
+        # Navigate back in the current tab's history
+        current_tab = self.browser.currentWidget()
+        if current_tab and current_tab.history().canGoBack():
+            current_tab.back()
+
+    def go_forward(self):
+        # Navigate forward in the current tab's history
+        current_tab = self.browser.currentWidget()
+        if current_tab and current_tab.history().canGoForward():
+            current_tab.forward()
+
+    def reload_page(self):
+        # Reload the current tab
+        current_tab = self.browser.currentWidget()
+        if current_tab:
+            current_tab.reload()
+
+    def close_current_tab(self):
+        # Close the current tab
+        if self.browser.count() > 1:
+            self.browser.removeTab(self.browser.currentIndex())
+
+    def add_favorite(self):
+        # Add the current URL to the favorites list
+        current_url = self.url_bar.text()
+        if current_url and current_url not in self.favorites:
+            self.favorites.append(current_url)
+            self.favorite_list.addItem(current_url)
+
+    def show_history(self):
+        # Create a new tab for the history
+        history_tab = QWidget()
+        layout = QVBoxLayout()
+
+        # Add a list of history items with the time
+        for label, url, timestamp in self.history:
+            history_item = QLabel(f"{timestamp}: {label} - {url}")
+            layout.addWidget(history_item)
+
+        clear_button = QPushButton("Clear History")
+        clear_button.clicked.connect(self.clear_history)
+        layout.addWidget(clear_button)
+
+        history_tab.setLayout(layout)
+        self.browser.addTab(history_tab, "History")
+
+    def clear_history(self):
+        # Clear the history
+        self.history.clear()
+        self.show_history()
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    QApplication.setApplicationName("TheAnthonyWorld Browser")
+
+    window = Browser()
+    window.show()  # Ensure the window stays open and visible
+    app.exec_()
